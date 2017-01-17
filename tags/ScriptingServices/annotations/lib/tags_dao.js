@@ -7,7 +7,7 @@ var database = require("db/database");
 var datasource = database.getDatasource();
 
 var persistentProperties = {
-	mandatory: ["ann_id"],
+	mandatory: ["id"],
 	optional: ["defaultLabel", "uri"]
 };
 
@@ -25,7 +25,7 @@ exports.insert = function(entity) {
 	
 	for(var i = 0; i< persistentProperties.mandatory.length; i++){
 		var propName = persistentProperties.mandatory[i];
-		if(propName==='ann_id')
+		if(propName==='id')
 			continue;//Skip validaiton check for id. It's epxected to be null on insert.
 		var propValue = entity[propName];
 		if(propValue === undefined || propValue === null){
@@ -44,16 +44,16 @@ exports.insert = function(entity) {
         var statement = connection.prepareStatement(sql);
         
         var i = 0;
-        entity.ann_id = datasource.getSequence('ANN_TAGS_ANN_ID').next();
-        statement.setLong(++i,  entity.ann_id);
+        entity.id = datasource.getSequence('ANN_TAGS_ANN_ID').next();
+        statement.setLong(++i,  entity.id);
         statement.setString(++i, entity.defaultLabel);        
         statement.setString(++i, entity.uri);
 
         statement.executeUpdate();
 
-        $log.info('ANN_TAG entity inserted with id[' +  entity.ann_id + ']');
+        $log.info('ANN_TAG[' +  entity.id + '] entity inserted');
 
-        return entity.ann_id;
+        return entity.id;
 
     } catch(e) {
 		e.errContext = sql;
@@ -83,7 +83,10 @@ exports.find = function(id) {
         var resultSet = statement.executeQuery();
         if (resultSet.next()) {
         	entity = createEntity(resultSet);
-        } 
+        	$log.info('ANN_TAG[' + id + '] entity found');
+        } else {
+        	$log.info('ANN_TAG[' + id + '] not found');
+        }
         return entity;
     } catch(e) {
 		e.errContext = sql;
@@ -113,7 +116,10 @@ exports.findByTagValue = function(tag) {
         var resultSet = statement.executeQuery();
         if (resultSet.next()) {
         	entity = createEntity(resultSet);
-        } 
+        	$log.info('ANN_TAG[' + id + '] entity with label[' + tag + '] found');
+        } else {
+        	$log.info('ANN_TAG[' + id + '] entity with label[' + tag + '] not found');
+        }
         return entity;
     } catch(e) {
 		e.errContext = sql;
@@ -171,14 +177,14 @@ exports.list = function(limit, offset, sort, order, expanded, tag) {
 //create entity as JSON object from ResultSet current Row
 function createEntity(resultSet) {
     var entity = {};
-	entity.ann_id = resultSet.getLong("ANN_ID");
+	entity.id = resultSet.getLong("ANN_ID");
     entity.defaultLabel = resultSet.getString("ANN_DEFAULT_LABEL");	
     entity.uri = resultSet.getString("ANN_URI");    
 	for(var key in Object.keys(entity)){
 		if(entity[key] === null)
 			entity[key] = undefined;
 	}	
-    $log.info("Transformation from DB JSON object finished");
+    $log.info("Transformation from ANN_TAG["+entity.id+"] DB JSON object finished");
     return entity;
 }
 
@@ -197,14 +203,14 @@ function createSQLEntity(entity) {
 		}
 	}	
 		
-	$log.info("Transformation to DB JSON object finished");
+	$log.info("Transformation to ANN_TAG["+entity.id+"] DB JSON object finished");
 	return persistentItem;
 }
 
 // update entity from a JSON object. Returns the id of the updated entity.
 exports.update = function(entity) {
 
-	$log.info('Updating ANN_TAG[' + entity!==undefined?entity.ann_id:entity + '] entity');
+	$log.info('Updating ANN_TAG[' + entity!==undefined?entity.id:entity + '] entity');
 
 	if(entity === undefined || entity === null){
 		throw new Error('Illegal argument: entity is ' + entity);
@@ -230,7 +236,7 @@ exports.update = function(entity) {
         var i = 0;
         statement.setString(++i, entity.defaultLabel);        
         statement.setString(++i, entity.uri);
-        var id = entity.ann_id;
+        var id = entity.id;
         statement.setLong(++i, id);
         statement.executeUpdate();
             
