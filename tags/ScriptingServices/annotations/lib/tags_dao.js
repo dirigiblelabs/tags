@@ -38,20 +38,20 @@ exports.insert = function(entity) {
     var connection = datasource.getConnection();
     try {
         var sql = "INSERT INTO ANN_TAG (";
-        sql += "ANN_ID, ANN)DEFAULT_LABEL, ANN_URI) "; 
+        sql += "ANN_ID, ANN_DEFAULT_LABEL, ANN_URI) "; 
         sql += "VALUES (?,?,?)";
 
         var statement = connection.prepareStatement(sql);
         
         var i = 0;
-        entity.disb_id = datasource.getSequence('ANN_TAGS_ANN_ID').next();
+        entity.ann_id = datasource.getSequence('ANN_TAGS_ANN_ID').next();
         statement.setLong(++i,  entity.ann_id);
         statement.setString(++i, entity.defaultLabel);        
         statement.setString(++i, entity.uri);
 
         statement.executeUpdate();
 
-        $log.info('ANN_TAG entity inserted with id[' +  entity.disb_id + ']');
+        $log.info('ANN_TAG entity inserted with id[' +  entity.ann_id + ']');
 
         return entity.ann_id;
 
@@ -105,10 +105,10 @@ exports.findByTagValue = function(tag) {
     var connection = datasource.getConnection();
     try {
         var entity;
-        var sql = "SELECT * FROM ANN_TAG WHERE TAG = ?";
+        var sql = "SELECT * FROM ANN_TAG WHERE ANN_DEFAULT_LABEL = ?";
      
         var statement = connection.prepareStatement(sql);
-        statement.setLong(1, tag);
+        statement.setString(1, tag);
 
         var resultSet = statement.executeQuery();
         if (resultSet.next()) {
