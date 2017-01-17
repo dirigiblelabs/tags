@@ -23,27 +23,25 @@ var create = function(context, io){
 	}	
 };
 
-Tag.prototype.cfg[""] = {
-	"post" : {
-		consumes: ["application/json"],
-		handler: function(context, io){
-			var input = io.request.readInputText();
-		    try{
-		    	var tags = JSON.parse(input);
-		    	if(!Array.isArray(tags)){
-		    		tags = [tags];
-		    	}
-		    	for(var i=0;i<tags.length;i++){
-		    		create.apply(this, [context, io]);
-		    	}
-				io.response.setStatus(io.response.NO_CONTENT);
-			} catch(e) {
-	    	    var errorCode = io.response.INTERNAL_SERVER_ERROR;
-	    	    this.logger.error(errorCode, e.message, e.errContext);
-	        	this.sendError(io, errorCode, errorCode, e.message, e.errContext);
-	        	throw e;
-			}		
-		}
+Tag.prototype.cfg[""].post = {
+	consumes: ["application/json"],
+	handler: function(context, io){
+		var input = io.request.readInputText();
+	    try{
+	    	var tags = JSON.parse(input);
+	    	if(!Array.isArray(tags)){
+	    		tags = [tags];
+	    	}
+	    	for(var i=0;i<tags.length;i++){
+	    		create.apply(this, [context, io]);
+	    	}
+			io.response.setStatus(io.response.NO_CONTENT);
+		} catch(e) {
+    	    var errorCode = io.response.INTERNAL_SERVER_ERROR;
+    	    this.logger.error(errorCode, e.message, e.errContext);
+        	this.sendError(io, errorCode, errorCode, e.message, e.errContext);
+        	throw e;
+		}		
 	}
 };
 
