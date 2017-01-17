@@ -66,7 +66,7 @@ exports.insert = function(entity) {
 // Reads a single entity by id, parsed into JSON object 
 exports.find = function(id) {
 
-	$log.info('Finding ANN_TAG entity with id[' + id + ']');
+	$log.info('Finding ANN_TAG[' + id + '] entity');
 
 	if(id === undefined || id === null){
 		throw new Error('Illegal argument for id parameter:' + id);
@@ -96,7 +96,7 @@ exports.find = function(id) {
 // Reads a single entity by id, parsed into JSON object 
 exports.findByTagValue = function(tag) {
 
-	$log.info('Finding ANN_TAG entity with tag[' + tag + ']');
+	$log.info('Finding ANN_TAG entity with label[' + tag + ']');
 
 	if(tag=== undefined || tag === null){
 		throw new Error('Illegal argument for tag parameter:' + tag);
@@ -204,11 +204,11 @@ function createSQLEntity(entity) {
 // update entity from a JSON object. Returns the id of the updated entity.
 exports.update = function(entity) {
 
-	$log.info('Updating ANN_TAG entity with id[' + entity!==undefined?entity.disb_id:entity + ']');
+	$log.info('Updating ANN_TAG[' + entity!==undefined?entity.ann_id:entity + '] entity');
 
 	if(entity === undefined || entity === null){
 		throw new Error('Illegal argument: entity is ' + entity);
-	}	
+	}
 	
 	for(var i = 0; i< persistentProperties.mandatory.length; i++){
 		var propName = persistentProperties.mandatory[i];
@@ -234,7 +234,7 @@ exports.update = function(entity) {
         statement.setLong(++i, id);
         statement.executeUpdate();
             
-        $log.info('ANN_TAG entity with disb_id[' + id + '] updated');
+        $log.info('ANN_TAG[' + id + '] entity updated');
         
         return this;
         
@@ -249,7 +249,7 @@ exports.update = function(entity) {
 // delete entity by id. Returns the id of the deleted entity.
 exports.remove = function(id) {
 
-	$log.info('Deleting ANN_TAG entity with id[' + id + ']');
+	$log.info('Deleting ANN_TAG[' + id + '] entity');
 
     var connection = datasource.getConnection();
     try {
@@ -271,7 +271,7 @@ exports.remove = function(id) {
         }
         statement.executeUpdate();
                 
-        $log.info('ANN_TAG entity with ann_id[' + id + '] deleted');                
+        $log.info('ANN_TAG[' + id + '] entity deleted');                
         
         return this;
 
