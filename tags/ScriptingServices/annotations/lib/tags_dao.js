@@ -116,9 +116,9 @@ exports.findByTagValue = function(tag) {
         var resultSet = statement.executeQuery();
         if (resultSet.next()) {
         	entity = createEntity(resultSet);
-        	$log.info('ANN_TAG[' + id + '] entity with label[' + tag + '] found');
+        	$log.info('ANN_TAG[' + entity.id + '] entity with label[' + tag + '] found');
         } else {
-        	$log.info('ANN_TAG[' + id + '] entity with label[' + tag + '] not found');
+        	$log.info('ANN_TAG[' + entity.id + '] entity with label[' + tag + '] not found');
         }
         return entity;
     } catch(e) {
