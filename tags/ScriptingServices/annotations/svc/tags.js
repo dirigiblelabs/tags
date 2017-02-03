@@ -1,14 +1,30 @@
 /* globals $ */
 /* eslint-env node, dirigible */
 "use strict";
-	
-var arester = require("arestme/arester");
-var tagsDAO = require("annotations/lib/tags_dao");
 
-var Tag = arester.asRestAPI(tagsDAO);
-Tag.prototype.logger.ctx = "Tags Svc";
+var tagsDAO = require("annotations/lib/tags_dao").get();
+var daoService = require('arestme/data_service').asService(tagsDAO, {}, 'Tags DAO Service');
 
-var create = function(context, io){
+var handler = function(context, io){
+	    try{
+	    	//TODO: fix this to a native sql query
+	    	var entities = daoService.dao.list({})
+	    					.filter(function(entity){
+	    						return entity.defaultLabel === context.queryParams.label;
+	    					}); 
+	    	io.response.println(JSON.stringify(entities, null, 2));
+			io.response.setStatus(io.response.OK);
+		} catch(e) {
+    	    var errorCode = io.response.INTERNAL_SERVER_ERROR;
+    	    this.logger.error(e.message, e);
+        	this.sendError(errorCode, errorCode, e.message);
+        	throw e;
+		}		
+	}
+daoService.addResourceHandler('label', 'get', handler, undefined, ["application/json"]);
+daoService.service();
+
+/*var create = function(context, io){
 	var input = io.request.readInputText();
     var entity = JSON.parse(input);
     try{
@@ -52,3 +68,4 @@ var request = require("net/http/request");
 var response = require("net/http/response");
 
 tag.service(request, response);
+*/
