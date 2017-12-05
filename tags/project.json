@@ -3,7 +3,7 @@
     "repository":{
         "type":"git",
         "branch":"master",
-        "url":"https://github.com/dirigiblelabs/tags.git"
+        "url":"https://github.com/dirigiblelabs/tags.git#3eeb5af3c2785173ffc72ee34a1f3864a0e26230"
         
     },
     "dependencies": [
