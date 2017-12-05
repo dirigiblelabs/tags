@@ -1,40 +1,41 @@
 {
-  "tableName":"ANN_TAG",
+  "name":"ANN_TAG",
+  "type":"TABLE",
   "columns":
     [
       {
         "name":"ANN_ID",
         "type":"BIGINT",
         "length":"0",
-        "notNull":"true",
+        "nullable":"false",
         "primaryKey":"true",
         "defaultValue":""
       },{
         "name":"ANN_DEFAULT_LABEL",
         "type":"VARCHAR",
         "length":"255",
-        "notNull":"false",
+        "nullable":"true",
         "primaryKey":"false",
         "defaultValue":""
       },{
         "name":"ANN_DESCR",
         "type":"VARCHAR",
         "length":"1000",
-        "notNull":"false",
+        "nullable":"true",
         "primaryKey":"false",
         "defaultValue":""
       },{
         "name":"ANN_NS",
         "type":"VARCHAR",
         "length":"1000",
-        "notNull":"false",
+        "nullable":"true",
         "primaryKey":"false",
         "defaultValue":""
       },{
         "name":"ANN_URI",
         "type":"VARCHAR",
         "length":"2000",
-        "notNull":"false",
+        "nullable":"true",
         "primaryKey":"false",
         "defaultValue":""
       }
